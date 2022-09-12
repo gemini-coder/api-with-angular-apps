@@ -1,1 +1,17 @@
-<server-time timeZone="Australia/Adelaide"></server-time>
+<div>
+    <h1>Server time component</h1>
+    <server-time [timeZone]="timeZone"></server-time>
+</div>
+
+<div>
+    <h1>
+        This component
+    </h1>
+    <select [(ngModel)]="timeZone">
+        <option value="Europe/London">London</option>
+        <option value="Australia/Adelaide">Adelaide</option>
+    </select>
+    <button (click)="callApi()">Call API</button>
+
+</div>
+

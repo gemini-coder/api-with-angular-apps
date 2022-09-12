@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { CoreModule } from 'core/core.module';
 
@@ -10,6 +11,8 @@ import { AppComponent } from './app.component';
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
+    FormsModule,
     CoreModule
   ],
   providers: [],

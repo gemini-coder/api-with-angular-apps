@@ -14,9 +14,9 @@ interface Response {
 }
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
-    constructor(private timeService: GlobalServerTimeService) {}
+    public constructor(private globalTimeService: GlobalServerTimeService) {}
 
-    intercept(
+    public intercept(
         request: HttpRequest<any>,
         next: HttpHandler
     ): Observable<HttpEvent<Response>> {
@@ -28,9 +28,8 @@ export class ApiInterceptor implements HttpInterceptor {
                     // Store the server time header in a constant
                     const serverTime = res.headers.get('Server-Time');
                     if (serverTime){
-                        // If the server time is part of the headers, then send this to the time service for any
-                        // components that are subscribed
-                        this.timeService.serverTime$.next(serverTime);
+                        // Set the server time on the global time service
+                        this.globalTimeService.setServerTime(serverTime);
                     }
                 }
             }),

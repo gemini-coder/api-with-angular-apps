@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Time } from 'core/interfaces/time.interface';
 import { GlobalServerTimeService } from 'core/services/global-time.service';
-import * as moment from 'moment-timezone';
 @Component({
     selector: 'server-time',
     templateUrl: './server-time.component.html',
@@ -9,36 +9,33 @@ import * as moment from 'moment-timezone';
 export class ServerTimeComponent {
     /**
      * Set the timezone that you want to use as part of this component.
-     * This will change the timezone for the global time service
+     * @usageNotes
+     * #### Set a timezone
+     * For example
+     * * `timeZone="Europe/London";`
+     * -OR-
+     * * `[timeZone]="timezone";`
      */
     @Input() public set timeZone(value: string) {
-        this._timeZone = value;
-        this._serverTimeService.timeZone = this._timeZone;
-    }
+        this._serverTimeService.locale = value;
+    };
+
     /**
-     * Get the current timeZone for this component
+     * Get the current time object
+     * @returns {Time | null}
+     * #### Get the time
+     * For example
+     * * `{{time.localDateTime}}`
      */
-    public get timeZone(): string {
-        return this._timeZone;
-    }
+    public time!: Time;
 
-    // the server time from the global time service.
-    public serverTime!: string;
-    // the current time from the global time service
-    public currentTime!: string;
-    // the timezone that we want to use for formatting the times
-    private _timeZone: string = 'Europe/London';
+    public constructor(private _serverTimeService: GlobalServerTimeService) {}
 
-    constructor(private _serverTimeService: GlobalServerTimeService) {}
-
-    ngOnInit(): void {
+    public ngOnInit(): void {
         // Subscribe to the server time from the global time service so we can get the last timestamp from the last api call
-        this._serverTimeService.serverTime$.subscribe((time) => {
-            this.serverTime = moment.tz(time, this.timeZone).toLocaleString();
-        });
-        // Subscribe to the current time so that we can change our clock in the component
-        this._serverTimeService.currentTime$.subscribe((currentTime) => {
-            this.currentTime = currentTime;
+        this._serverTimeService.getAccurateTime().subscribe((time) => {
+            this.time = time;
         });
     }
+
 }

@@ -18,11 +18,11 @@ function addHeaders(req: Request, res: Response, next: NextFunction) {
 // Get the current time on the server including time zone offsets (e.g. +1 hour)
 const currentTime = () => {
 	const date = new Date(Date.now());
-	var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-	var offset = date.getTimezoneOffset() / 60;
-	var hours = date.getHours();
-	newDate.setHours(hours - offset);
-	return newDate.toISOString();
+	// var newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
+	// var offset = date.getTimezoneOffset() / 60;
+	// var hours = date.getHours();
+	// newDate.setHours(hours - offset);
+	return date.toISOString();
 };
 
 // Start the api service on the port defied in the env file

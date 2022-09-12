@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { ApiService } from 'core/services/api.service';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,12 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'app2';
+
+  public constructor(private _apiService: ApiService){}
+
+  public ngOnInit(): void {
+    this._apiService.getRoute().subscribe((data) => {
+        // Put logic from api call here
+    })
+  }
 }

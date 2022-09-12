@@ -1,5 +1,7 @@
-<div class="date-time-container" *ngIf="currentTime">
+<div class="date-time-container" *ngIf="time">
   <p>Current Time:</p>
-  <p class="date-time">{{currentTime}} </p>
-  <p>({{timeZone}})</p>
+  <p class="date-time">{{time.localDateTime}} </p>
+  <p>({{time.locale}})</p>
+  <small>{{!time.lastChecked ? 'Local time' : 'Server time' }}</small>
 </div>
+

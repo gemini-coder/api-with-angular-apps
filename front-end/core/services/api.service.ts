@@ -13,12 +13,12 @@ export class ApiService {
     // Base endpoint for the api services
     private _baseEndpoint = environment.apiUrl;
 
-    constructor(private _http: HttpClient) {}
+    public constructor(private _http: HttpClient) {}
 
     /**
-     *
+     * Get the data from the demo api call
      * @returns Get the demo api endpoint
-     * @throws an error with the
+     * @throws an error with the call
      */
     public getRoute(): Observable<any> {
         return this._http.get(`${this._baseEndpoint}`).pipe(

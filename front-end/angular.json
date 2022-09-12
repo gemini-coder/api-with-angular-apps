@@ -30,7 +30,10 @@
             "styles": [
               "apps/app1/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+                "moment"
+            ]
           },
           "configurations": {
             "production": {
@@ -130,7 +133,10 @@
             "styles": [
               "apps/app2/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "allowedCommonJsDependencies": [
+                "moment"
+            ]
           },
           "configurations": {
             "production": {

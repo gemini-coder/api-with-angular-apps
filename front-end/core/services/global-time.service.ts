@@ -1,37 +1,79 @@
 import { Injectable } from '@angular/core';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import * as moment from 'moment-timezone';
+import { Time } from 'core/interfaces/time.interface';
 
 @Injectable({
     providedIn: 'root',
 })
 export class GlobalServerTimeService {
+    public locale: string = 'Europe/London';
+
+    /**
+     * Set the time default as the local systems time
+     */
+    private _time: number = new Date().getTime();
+
+    /**
+     * If there has been no api calls, will use the local system
+     */
+    private time$: Subject<Time> = new Subject<Time>();
+
+    /**
+     * Default time to refresh the time
+     */
+    private pollTime = 200;
+
     /**
      * Subscribe to receive the timestamp from the last api call processed
-    */
-    public serverTime$: Subject<string> = new Subject<string>();
+     */
+    private serverTime$: Subject<string> = new Subject<string>();
 
     /**
-     * Subscribe to get the current date and time for the timezone provided
+     * Last server poll
      */
-    public currentTime$: Subject<string> = new Subject<string>();
+    private _lastChecked!: string;
 
-    /**
-     * Set the timezone that you want to use for any times in this service
-     */
-    public timeZone: string = 'Europe/London';
-
-    constructor() {
-        // Start up the current time subject
-        this.getDateTime();
+    public constructor() {
+        this.serverTime$.subscribe((time) => {
+            this._lastChecked = time;
+            this._time = moment(time).valueOf();
+        });
+        this.setTime();
     }
 
     /**
-     * Process the current date time repeating every 500ms to ensure accuracy
+     * Set the server time to make sure the application has the correct time
+     * @param time
      */
-    private getDateTime = (): void => {
-        const dateTime = moment.tz(new Date(), this.timeZone).toLocaleString();
-        this.currentTime$.next(dateTime);
-        setTimeout(this.getDateTime, 500);
+    public setServerTime(time: string): void {
+        this.serverTime$.next(time);
+    }
+
+    /**
+     * Subscribe to get the accurate time. If no api calls have been made, will default to the local system time
+     * @returns Observable Time
+     */
+    public getAccurateTime(): Observable<Time> {
+        return this.time$.asObservable();
+    }
+
+    /**
+     * Sets the time$ variable with the correct time
+     */
+    public setTime = (): void => {
+        setInterval(() => {
+            this._time = this._time + this.pollTime;
+            this.time$.next({
+                timeStamp: moment.tz(this._time, this.locale).valueOf(),
+                localDateTime: moment.tz(this._time, this.locale).toLocaleString(),
+                time: moment.tz(this._time, this.locale).format('HH:mm:ss'),
+                date: moment.tz(this._time, this.locale).format('DD/MM/YYYY'),
+                locale: this.locale,
+                lastChecked: this._lastChecked,
+            });
+            this.setTime;
+        }, this.pollTime);
     };
+
 }

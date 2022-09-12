@@ -2,19 +2,24 @@ import { Component } from '@angular/core';
 import { ApiService } from 'core/services/api.service';
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'app1';
+    /**
+     * For setting the time zone in this component
+     */
+    public timeZone: string = 'Europe/London';
 
-  constructor(private _apiService: ApiService) {}
+    public constructor(private _apiService: ApiService) {}
 
-  public ngOnInit(): void {
-    this._apiService.getRoute().subscribe((result => {
-      // Logic from api call goes here
-    }))
-  }
-
+    /**
+     * Call the api
+     */
+    public callApi(): void {
+        this._apiService.getRoute().subscribe((result) => {
+            // Logic from api call goes here
+        });
+    }
 }
