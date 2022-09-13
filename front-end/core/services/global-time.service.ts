@@ -34,13 +34,18 @@ export class GlobalServerTimeService {
      */
     private _lastChecked!: string;
 
+    /**
+     * variable for storing the interval loop
+     */
+    private _interval: any;
+
     public constructor() {
         this.serverTime$.subscribe((time) => {
             this._lastChecked = time;
             this._time = moment(time).valueOf();
-            this.setTime();
+            this.clearInter()
+            this.setInter()
         });
-
     }
 
     /**
@@ -59,11 +64,12 @@ export class GlobalServerTimeService {
         return this.time$.asObservable();
     }
 
+
     /**
-     * Sets the time$ variable with the correct time
+     * Sets the interval and loops through the time updating inline with the pollTime variable
      */
-    public setTime = (): void => {
-        setInterval(() => {
+    private setInter(){
+        this._interval = setInterval(() => {
             this._time = this._time + this.pollTime;
             this.time$.next({
                 timeStamp: moment.tz(this._time, this.locale).valueOf(),
@@ -73,8 +79,14 @@ export class GlobalServerTimeService {
                 locale: this.locale,
                 lastChecked: this._lastChecked,
             });
-            this.setTime;
         }, this.pollTime);
-    };
+    }
+
+    /**
+     * Clear the interval so we can start a new one
+     */
+    private clearInter(){
+        clearInterval(this._interval);
+    }
 
 }
