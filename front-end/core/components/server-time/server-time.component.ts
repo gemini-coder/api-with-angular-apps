@@ -6,6 +6,10 @@ import { GlobalServerTimeService } from 'core/services/global-time.service';
     templateUrl: './server-time.component.html',
     styleUrls: ['./server-time.component.scss'],
 })
+/**
+ * Will display a running clock to the user if the server time has been initialised
+ * The time will calibrate each time an api call has been made
+ */
 export class ServerTimeComponent {
     /**
      * Set the timezone that you want to use as part of this component.

@@ -10,9 +10,9 @@ export class GlobalServerTimeService {
     public locale: string = 'Europe/London';
 
     /**
-     * Set the time default as the local systems time
+     * Stores the current timestamp based on the server time
      */
-    private _time: number = new Date().getTime();
+    private _time!: number;
 
     /**
      * If there has been no api calls, will use the local system
@@ -20,7 +20,7 @@ export class GlobalServerTimeService {
     private time$: Subject<Time> = new Subject<Time>();
 
     /**
-     * Default time to refresh the time
+     * Time to refresh the time
      */
     private pollTime = 200;
 
@@ -38,8 +38,9 @@ export class GlobalServerTimeService {
         this.serverTime$.subscribe((time) => {
             this._lastChecked = time;
             this._time = moment(time).valueOf();
+            this.setTime();
         });
-        this.setTime();
+
     }
 
     /**
